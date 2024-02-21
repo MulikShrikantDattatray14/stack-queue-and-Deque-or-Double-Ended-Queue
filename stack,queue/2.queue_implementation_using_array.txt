@@ -1,0 +1,109 @@
+// also see the gfg implemented code below-
+//https://www.geeksforgeeks.org/problems/implement-queue-using-array/1
+class Queue {
+  constructor() {
+    this.arr = new Array(maxSize);
+    this.start = -1;
+    this.end = -1;
+    this.currSize = 0;
+    this.maxSize = maxSize;
+  }
+
+  push(newElement) {
+    // push at back
+    if (this.currSize === this.maxSize) {
+      console.log("Queue is full\nExiting...");
+      process.exit(1);
+    }
+
+    if (this.end === -1) {
+      // inserted the first element
+      this.start = 0;
+      this.end = 0;
+    } else {
+      this.end = (this.end + 1) % this.maxSize;
+    }
+
+    this.arr[this.end] = newElement;
+    console.log("The element pushed is " + newElement);
+    this.currSize++;
+  }
+
+  pop() {
+    if (this.start === -1) {
+      console.log("Queue Empty\nExiting...");
+      process.exit(1);
+    }
+    // first in first out .
+    const popped = this.arr[this.start];
+
+    if (this.currSize === 1) {
+      this.start = -1;
+      this.end = -1;
+    } else {
+      this.start = (this.start + 1) % this.maxSize;
+    }
+
+    this.currSize--;
+    return popped;
+  }
+
+  top() {
+    if (this.start === -1) {
+      console.log("Queue is Empty");
+      process.exit(1);
+    }
+
+    return this.arr[this.start];
+  }
+
+  size() {
+    return this.currSize;
+  }
+}
+
+const q = new Queue(6);
+q.push(4);
+q.push(14);
+q.push(24);
+q.push(34);
+
+console.log("The peek of the queue before deleting any element " + q.top());
+console.log("The size of the queue before deletion " + q.size());
+console.log("The first element to be deleted " + q.pop());
+console.log("The peek of the queue after deleting an element " + q.top());
+console.log("The size of the queue after deleting an element " + q.size());
+
+
+////////////////////////////////////////////////////////////////////////////////
+//gfg-CODE
+//https://www.geeksforgeeks.org/problems/implement-queue-using-array/1
+//User function Template for javascript
+
+class MyQueue {
+  constructor() {
+    this.front = 0;
+    this.rear = 0;
+    this.arr = new Array(100005);
+  }
+
+  //Function to push an element x in a queue.
+  push(x) {
+    this.arr[this.rear] = x;
+    this.rear = this.rear + 1;
+    this.arr.length++;
+  }
+
+  //Function to pop an element from queue and return that element.
+  pop() {
+    if (this.front == this.rear) return -1;
+    let popped = this.arr[this.front];
+
+    if (this.arr.length === 1) {
+      this.front = 0;
+      this.rear = 0;
+    } else this.front++;
+
+    return popped;
+  }
+}

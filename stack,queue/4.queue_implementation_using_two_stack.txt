@@ -1,0 +1,51 @@
+// queue implementing using two stack
+//Queue- FIFO
+//Stack- LIFO
+class MyQueue {
+  constructor() {
+    // lets implement first in first out .
+    this.input = [];
+    this.output = [];
+  }
+
+  push(x) {
+    console.log("The element pushed is " + x);
+    this.input.push(x);
+  }
+
+  pop() {
+    // Shift input to output
+    if (this.output.length === 0) {
+      while (this.input.length !== 0) {
+        // thus input gets reversed into the output
+        this.output.push(this.input.pop());
+      }
+    }
+    // removes the top element form the output array
+    const x = this.output.pop();
+    return x;
+  }
+
+  peek() {
+    // Shift input to output
+    if (this.output.length === 0) {
+      while (this.input.length !== 0) {
+        this.output.push(this.input.pop());
+      }
+    }
+
+    return this.output[this.output.length - 1];
+  }
+
+  size() {
+    return this.output.length + this.input.length;
+  }
+}
+
+const q = new MyQueue();
+q.push(3);
+q.push(4);
+console.log("The element popped is " + q.pop());
+q.push(5);
+console.log("The top element is " + q.peek());
+console.log("The size of the queue is " + q.size());

@@ -1,0 +1,116 @@
+// Implementation of stack
+// The stack can be implemented in two ways:
+
+// 1.Statically:  Using arrays
+// 2.Dynamically: Using a linked list
+// In this article, we’ll focus more on the implementation of a stack using a linked list.
+// below code is anuj bhaiya approach , not of striver
+
+// we are basically doing all the operations at head
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+}
+// all the operations are happening at head
+class MyStack {
+  constructor() {
+    this.head = null; // or this.top
+    this.size = 0;
+  }
+  // bring head back to the first position.
+  push(data) {
+    const temp = new Node(data);
+    temp.next = this.head; // head is null at start
+    this.size++;
+    // bring back head to the starting position .
+    this.head = temp;
+  }
+
+  peek() {
+    // last in first out
+    if (this.head === null) {
+      console.log("Stack is empty");
+      return;
+    }
+    return this.head.data;
+  }
+
+  pop() {
+    if (this.head === null) {
+      console.log("Stack is empty");
+      return;
+    }
+    const res = this.head.data;
+    this.head = this.head.next;
+    this.size--;
+    return res;
+  }
+
+  isEmpty() {
+    return this.head === null;
+  }
+
+  getSize() {
+    return this.size;
+  }
+}
+
+// Example usage:
+const stack = new MyStack();
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+console.log("Peek:", stack.peek()); // Output: 3
+
+console.log("Pop:", stack.pop()); // Output: 3
+
+console.log("Size:", stack.getSize()); // Output: 2
+
+console.log("Is empty:", stack.isEmpty()); // Output: false
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//gfg-https://www.geeksforgeeks.org/problems/implement-stack-using-linked-list/1
+
+
+class MyStack {
+    // class StackNode{
+    //     constructor(a){
+    //         this.data = a;
+    //         this.next = null;
+    //     }
+    // }
+    constructor() {
+      this.top = null;
+      this.size = 0;
+    }
+  
+    /**
+     * @param {number} a
+     */
+  
+    //Function to push an integer into the stack.
+    push(a) {
+      const temp = new StackNode(a);
+      temp.next = this.top; // head is null at start
+      this.size++;
+      this.top = temp;
+    }
+  
+    /**
+     */
+  
+    //Function to remove an item from top of the stack.
+    pop() {
+      if (this.top === null) {
+        return -1;
+      }
+      const res = this.top.data;
+      this.top = this.top.next;
+      this.size--;
+      return res;
+    }
+  }
+  

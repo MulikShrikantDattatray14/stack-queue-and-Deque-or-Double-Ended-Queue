@@ -1,0 +1,68 @@
+
+
+function priority(ch) {
+    if (ch === '^') {
+        return 3;
+    } else if (ch === '*' || ch === '/') {
+        return 2;
+    } else if (ch === '+' || ch === '-') {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+module.exports = {
+    //param A : string
+    //return a strings
+
+
+    //https://www.youtube.com/watch?v=m7SGekhd1mQ
+    solve: function (A) {
+        A = A.split("")
+        var exp = [];
+        var stack = [];
+
+
+        for (var i = 0; i < A.length; i++) {
+            var ch = A[i];
+            if ('a' <= ch && ch <= 'z') {// print it or push into exp[]
+                exp.push(ch);
+            } else if (ch === '(') {//push into stack
+                stack.push(ch);
+            } else if (ch === ')') {// keep popping from stack and print till '(' is found.
+                while (stack[stack.length - 1] !== '(') {
+                    var val2 = exp.pop();
+                    var val1 = exp.pop();
+                    var operator = stack.pop();
+                    exp.push(val1 + val2 + operator);
+                }
+                stack.pop();// removes open bracket
+            } else {//operator 
+                if (stack.length === 0 || stack[stack.length - 1] === '(') {// if stack is empty, push it in stack
+                    stack.push(ch);
+                } else {// compare with the top operator in the stack. if higher precedence then push.
+                    //Else popping from the stack and print till lower precedence operator is found.
+
+                    while (stack.length > 0 && priority(stack[stack.length - 1]) >= priority(ch)) {
+                        // Else popping from the stack and print till lower precedence operator is found.
+                        var val2 = exp.pop();
+                        var val1 = exp.pop();
+                        var operator = stack.pop();
+                        exp.push(val1 + val2 + operator);
+                    }
+                    stack.push(ch);// if  higher precedence, the push into stack
+
+                }
+            }
+        }
+        while (stack.length > 0) {// once the expression is finished , keep popping from the stack and push into exp
+            var val2 = exp.pop();
+            var val1 = exp.pop();
+            var operator = stack.pop();
+            exp.push(val1 + val2 + operator);
+        }
+
+       return (exp[0]);
+
+    }
+};

@@ -1,0 +1,50 @@
+Given an array A of both positive and negative integers.
+
+Your task is to compute the sum of minimum and maximum elements of all sub-array of size B.
+
+NOTE: Since the answer can be very large, you are required to return the sum modulo 109 + 7.
+
+//=============================================================================================================
+// compute the sum of minimum and maximum elements of all sub-array of size B.
+
+let A = [2, 5, -1, 7, -3, -1, -2];
+let B = 4;
+
+const n = A.length;
+const mod = 1000000007;
+const max = [];
+const min = [];
+let sum = 0;
+// 1st window
+for (let i = 0; i < B; i++) {
+    // only push the elements that may contribute to maximum
+    while (max.length && A[max[max.length - 1]] <= A[i]) max.pop();
+    // only push the elements that may contribute to minimum
+    while (min.length && A[min[min.length - 1]] >= A[i]) min.pop();
+    // add the current elememt's index
+    max.push(i);
+    min.push(i);
+}
+
+// sum of min and max for first subarray
+sum += A[max[0]] + (A[min[0]] % mod);
+sum = (sum + mod) % mod;
+// traverse the remaining subarray/windows
+for (let i = B; i < n; i++) {
+    // to maintain the window limit,elements falling outside windows should be removed.
+    //remove from front.
+    while (max.length && max[0] <= i - B) max.shift();
+    while (min.length && min[0] <= i - B) min.shift();
+    // only push the elements that may contribute to maximum
+    while (max.length && A[max[max.length - 1]] <= A[i]) max.pop();
+    // only push the elements that may contribute to minimum
+    while (min.length && A[min[min.length - 1]] >= A[i]) min.pop();
+    // add the current elememt's index
+    max.push(i);
+    min.push(i);
+    // sum of min and max for current subarray
+    sum += A[min[0]] + (A[max[0]] % mod);
+    sum = (sum + mod) % mod;
+}
+
+console.log(sum);

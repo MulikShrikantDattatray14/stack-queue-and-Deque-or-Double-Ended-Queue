@@ -1,0 +1,79 @@
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.front = null;
+    this.rear = null;
+  }
+  // front will stay with the old data and rear will stay with the new data
+  enqueue(data) {
+    const newNode = new Node(data);
+    if (this.front === null) {
+      // empty queue
+      this.front = this.rear = newNode;
+      return;
+    }
+    this.rear.next = newNode;
+    // take rear ahead, so that new node will be attached to it ., so the rear will always stay with the newly inserted data.
+    this.rear = newNode;
+  }
+
+  dequeue() {
+    if (this.front === null) {
+      throw new Error("Queue is empty");
+    }
+    const result = this.front.data;
+    this.front = this.front.next;
+    return result;
+  }
+}
+
+// Example usage:
+const myQueue = new Queue();
+
+myQueue.enqueue(1);
+myQueue.enqueue(2);
+myQueue.enqueue(3);
+
+console.log(myQueue.dequeue()); // Output: 1
+console.log(myQueue.dequeue()); // Output: 2
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//gfg code - https://www.geeksforgeeks.org/problems/implement-queue-using-linked-list/1
+
+//User function Template for javascript
+
+class MyQueue {
+  constructor() {
+    this.front = null; // QueueNode
+    this.rear = null; // QueueNode
+  }
+
+  //Function to push an element into the queue.
+  push(x) {
+    const newNode = new QueueNode(x);
+    if (this.front === null) {
+      // empty queue
+      this.front = this.rear = newNode;
+      return;
+    }
+    this.rear.next = newNode;
+    this.rear = newNode; //keep rear moving ahead
+  }
+
+  //Function to pop front element from the queue.
+  pop() {
+    if (this.front === null) {
+      return -1;
+    }
+    const result = this.front.data;
+    this.front = this.front.next;
+    return result;
+  }
+}

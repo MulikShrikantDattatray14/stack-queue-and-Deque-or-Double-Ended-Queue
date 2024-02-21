@@ -1,0 +1,69 @@
+Problem Description :-
+
+Given a string A denoting an expression. It contains the following operators '+', '-', '*', '/'.
+Check whether A has redundant braces or not.
+NOTE: A will be always a valid expression and will not contain any white spaces.
+
+Problem Constraints
+1 <= |A| <= 105
+
+Input Format
+The only argument given is string A.
+
+Output Format
+Return 1 if A has redundant braces else, return 0.
+
+Example Input
+Input 1:
+ A = "((a+b))"
+Input 2:
+ A= "(a+(a+b))"
+
+
+Example Output
+Output 1:
+ 1
+Output 2:
+ 0
+
+
+Example Explanation
+Explanation 1:
+ ((a+b)) has redundant braces so answer will be 1.
+Explanation 2:
+ (a+(a+b)) doesn't have have any redundant braces so answer will be 0.
+
+
+==============================================================================================================
+A = "((a+b))";
+//https://www.youtube.com/watch?v=rlCSjCGc3Z0
+let n = A.length;
+let stack = [];
+let ans = 0; // redundant braces are not present
+for (let i = 0; i < n; i++) {
+    let ch = A[i];
+    if (ch == "+" || ch == "-" || ch == "*" || ch == "/") {
+        stack.push(ch);
+    } else if (ch == "(") {
+        stack.push(ch);
+    } else if (ch == ")") {
+        //if the top element in the stack is the opening bracket.
+        if (stack[stack.length - 1] == "(") {
+            //  bcz nothing is accomodated in between those braces
+            ans = 1;
+            break;
+        }
+
+        while (
+            stack[stack.length - 1] == "+" ||
+            stack[stack.length - 1] == "-" ||
+            stack[stack.length - 1] == "*" ||
+            stack[stack.length - 1] == "/"
+        ) {
+            stack.pop();
+        }
+        //popping the closing bracket - as we h
+        stack.pop();
+    }
+}
+console.log(ans);

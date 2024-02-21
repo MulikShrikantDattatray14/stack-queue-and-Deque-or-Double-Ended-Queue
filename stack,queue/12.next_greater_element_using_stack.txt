@@ -1,0 +1,27 @@
+function nextGreaterElements(nums) {
+  const n = nums.length;
+  const nge = new Array(n).fill(0);
+  const st = []; // stack from top to bottom is in increasing order.
+  // for rotating array use - 2n-1 , or non-rotating array use n-1
+  for (let i = 2 * n - 1; i >= 0; i--) {
+    // iterate from last
+    // if the top element in stack is lesser ,remove till the greater element in stack appear top
+    // first pop and then push into the stack
+    while (st.length > 0 && st[st.length - 1] <= nums[i % n]) {
+      // top element in stack is smaller than the current eleement.
+      st.pop();
+    }
+    if (i < n) {
+      nge[i] = st.length > 0 ? st[st.length - 1] : -1;
+    }
+    // if the top element in stack is greater , directly push
+    st.push(nums[i % n]);
+  }
+  return nge;
+}
+const arr = [5, 7, 1, 2, 6, 0];
+const arr2 = nextGreaterElements(arr);
+console.log("The next greater elements are ");
+for (let i = 0; i < arr2.length; i++) {
+  console.log(arr2[i] + " ");
+}

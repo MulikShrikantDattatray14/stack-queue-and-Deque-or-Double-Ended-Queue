@@ -1,0 +1,33 @@
+// Given an array, find the nearest smaller element G[i] for every element A[i] in the array such that the element has an index smaller than i.
+// Input 1:
+//     A = [4, 5, 2, 10, 8]
+// Output 1:
+//     G = [-1, 4, -1, 2, 2]
+
+//logic : question - find lesser on left(same as 2.next_greater_2.js)
+//my logic- reverse the array and find on right side
+function nextlesserElements(nums) {
+  const n = nums.length;
+  const nge = new Array(n).fill(0);
+  const st = [];
+  // for rotating array use - 2n-1 , or non-rotating array use n-1
+  for (let i = n - 1; i >= 0; i--) {
+    // iterate from last
+    // if the top element in stack is lesser ,remove till the greater element in stack appear top
+    // first pop and then push into the stack
+    while (st.length > 0 && st[st.length - 1] >= nums[i]) {
+      st.pop();
+    }
+    if (i < n) {
+      nge[i] = st.length > 0 ? st[st.length - 1] : -1;
+    }
+    // if the top element in stack is greater , directly push
+    st.push(nums[i]);
+  }
+  return nge;
+}
+
+let arr = [4, 5, 2, 10, 8];
+arr = arr.reverse();
+const arr2 = nextlesserElements(arr);
+console.log(arr2.reverse());

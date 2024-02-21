@@ -1,0 +1,87 @@
+Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid.
+
+Return a list of unique strings that are valid with the minimum number of removals. You may return the answer in any order.
+
+Example 1:
+Input: s = "()())()"
+Output: ["(())()","()()()"]
+
+Example 2:
+Input: s = "(a)())()"
+Output: ["(a())()","(a)()()"]
+
+Example 3:
+Input: s = ")("
+Output: [""]
+ 
+
+Constraints:
+
+1 <= s.length <= 25
+s consists of lowercase English letters and parentheses '(' and ')'.
+There will be at most 20 parentheses in s.
+
+
+
+
+//===============================================================================================================================================================================================================================
+
+//https://www.youtube.com/watch?v=y7Us-H5um0M&t=156s
+
+function getMinInValid(s) {
+    let stck = [];
+    for (let i = 0; i < s.length; i++) {
+        if (s[i] === '(') {
+            stck.push('(');
+        } else if (s[i] === ')') {
+            if (stck.length > 0 && stck[stck.length - 1] === '(') {
+                stck.pop();
+            } else {
+                stck.push(')');
+            }
+        }
+
+    }
+    return stck.length;
+}
+
+
+let res = [];
+let mp = new Map();
+function solve(s, minInv) {
+    // to avoid the duplication;
+    if (mp.get(s) !== undefined && mp.get(s) !== 0) {
+        return;
+    } else {
+        mp.set(s, 1);
+    }
+
+    // Base case
+    if (minInv < 0) {
+        return;
+    }
+
+    if (minInv === 0) {
+        if (getMinInValid(s) === 0) {
+            res.push(s);
+        }
+        return;
+    }
+    // skipping each braces each time.
+    for (let i = 0; i < s.length; i++) {
+        let left = s.substring(0, i);
+        let right = s.substring(i + 1);
+        solve(left + right, minInv - 1);
+    }
+}
+
+function removeInvalidParentheses(s) {
+    let min_invalid = getMinInValid(s)
+    solve(s, min_invalid);
+    return res;
+}
+
+// Example usage:
+let inputString = "()())()"
+let result = removeInvalidParentheses(inputString);
+console.log(result);

@@ -1,0 +1,34 @@
+function solve() {
+    // Initalize your variables here
+    this.minStack = [];// stores min till  that point 
+    this.stack = [];
+};
+solve.prototype.push = function (e) {
+    let temp = e;
+    // normal stack
+    this.stack.push(e);
+
+    // minimum stack
+    if (this.minStack.length !== 0) {
+        temp = Math.min(e, this.minStack[this.minStack.length - 1]);
+    }
+    this.minStack.push(temp);
+
+};
+solve.prototype.pop = function () {
+    //remove last one from both the stacks
+    this.minStack.pop();
+    this.stack.pop();
+    return;
+};
+solve.prototype.top = function () {
+    // return top
+    return (this.stack.length !== 0) ? this.stack[this.stack.length - 1] : -1;
+};
+solve.prototype.getMin = function () {
+    // return minimum
+    return (this.minStack.length !== 0) ? this.minStack[this.minStack.length - 1] : -1;
+};
+module.exports = {
+    solve: solve
+};

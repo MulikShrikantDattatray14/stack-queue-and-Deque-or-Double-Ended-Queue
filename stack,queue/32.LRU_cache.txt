@@ -1,0 +1,159 @@
+// explaination : https://www.youtube.com/watch?v=xDEuM5qa0zg
+
+//code implementation : https://www.youtube.com/watch?v=Xc4sICC8m4M
+
+//cache memory, supplementary memory system that temporarily stores frequently used instructions and data for quicker processing by the central processing unit (CPU) of a computer. The cache augments, and is an extension of, a computer's main memory.
+
+
+class Node {
+  // doubled linked list
+  constructor(_key, _value) {
+    this.prev = null;
+    this.next = null;
+    this.key = _key;
+    this.value = _value;// here value is the address
+  }
+}
+
+class LRUCache {
+  // doubly linked list
+  constructor(_capacity) {
+    this.head = new Node(0, 0);
+    this.tail = new Node(0, 0);
+    this.map = new Map(); // to keep a track
+    this.capacity = _capacity;
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+  }
+
+  get(key) {
+    if (this.map.has(key)) {
+      // make it the latest recently used , thus bring it near to head
+      const node = this.map.get(key);
+      // remove from the old position
+      this.remove(node);
+      // insert it at new position , very next to head
+      this.insert(node);
+      return node.value;
+    } else {
+      return -1;
+    }
+  }
+
+  put(key, value) {
+    // so now you are going to insert the new value.
+    // if previously such value is present , remove it and insert it near head, so that it becomes the latest value
+    if (this.map.has(key)) {
+      // remove from the old position, and insert next to head with the latest value.
+      this.remove(this.map.get(key));
+    }
+    ///if not previosuly present, first check for the capacity
+    if (this.map.size === this.capacity) {
+      // remove the least recently used from the tail side
+      this.remove(this.tail.prev);
+    }
+    // insert the new value near the head, so that it becomes the LRU
+    this.insert(new Node(key, value));
+  }
+
+  remove(node) {
+    //delete the node from the map 
+    this.map.delete(node.key);
+    // make forward and backward connections
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+  }
+
+  insert(node) {
+    // first insert in map
+    this.map.set(node.key, node);
+    //now make connections by insert the new node very next to head.
+    node.next = this.head.next; // link new node to head.next
+    node.next.prev = node; // make conections of prev of head.next to node
+    this.head.next = node; // connect head to the new node
+    node.prev = this.head; // connect prev of node to the head
+  }
+}
+
+// Example usage:
+const lRUCache = new LRUCache(2);
+console.log(lRUCache.put(1, 1)); // null
+console.log(lRUCache.put(2, 2)); // null
+console.log(lRUCache.get(1)); // 1
+console.log(lRUCache.put(3, 3)); // null
+console.log(lRUCache.get(2)); // -1
+console.log(lRUCache.put(4, 4)); // null
+console.log(lRUCache.get(1)); // -1
+console.log(lRUCache.get(3)); // 3
+console.log(lRUCache.get(4)); // 4
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+leetcode submitted code : 
+
+
+class Node {
+  constructor(_key, _value) {
+    this.prev = null;
+    this.next = null;
+    this.key = _key;
+    this.value = _value;
+  }
+}
+
+var LRUCache = function (_capacity) {
+  this.head = new Node(0, 0);
+  this.tail = new Node(0, 0);
+  this.map = new Map();
+  this.capacity = _capacity;
+  this.head.next = this.tail;
+  this.tail.prev = this.head;
+};
+
+LRUCache.prototype.get = function (key) {
+  if (this.map.has(key)) {
+    // make it the latest recently used , thus bring it near to head
+    const node = this.map.get(key);
+    this.remove(node);
+    this.insert(node);
+    return node.value;
+  } else {
+    return -1;
+  }
+};
+
+
+LRUCache.prototype.put = function (key, value) {
+  // if previously such value is present , remove it and insert it near head, so that it becomes the latest value
+  if (this.map.has(key)) {
+    this.remove(this.map.get(key));
+  }
+  ///if not previosuly present, first check for the capacity
+  if (this.map.size === this.capacity) {
+    // remove the least recently used
+    this.remove(this.tail.prev);
+  }
+  // insert the new value near the head
+  this.insert(new Node(key, value));
+};
+
+
+LRUCache.prototype.remove = function (node) {
+  //delete the nodes
+  this.map.delete(node.key);
+  // make forward and backward connections
+  node.prev.next = node.next;
+  node.next.prev = node.prev;
+
+}
+
+LRUCache.prototype.insert = function (node) {
+  // first insert in map
+  this.map.set(node.key, node);
+  //now make connections
+  node.next = this.head.next; // link new node to head.next
+  node.next.prev = node; // make conections of prev of head.next to node
+  this.head.next = node; // connect head to the new node
+  node.prev = this.head; // connect prev of node to the head
+}

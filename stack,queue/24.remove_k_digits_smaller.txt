@@ -1,0 +1,64 @@
+Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
+
+Example 1:
+
+Input: num = "1432219", k = 3
+Output: "1219"
+Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+Example 2:
+
+Input: num = "10200", k = 1
+Output: "200"
+Explanation: Remove the leading 1 and the number is 200. Note that the output must not contain leading zeroes.
+Example 3:
+
+Input: num = "10", k = 2
+Output: "0"
+Explanation: Remove all the digits from the number and it is left with nothing which is 0.
+
+
+
+//https://www.youtube.com/watch?v=RCE2L0Zk7xE
+
+//return the smallest possible integer after removing k digits from num.
+
+let num = "00001234567890";
+let k = 3;
+
+let st = [];
+for (let i = 0; i < num.length; i++) {
+  let ch = num.charAt(i);
+  // stack is not empty && k is still postive && top element is greater , so keep popping and keep decreasing value of k ;
+  while (st.length > 0 && k > 0 && st[st.length - 1] > ch) {
+    st.pop();
+    k--;
+  }
+  // finally insert the value
+  st.push(ch);
+}
+
+// once the entire string is traversed and if  k is still positive , so start removing  the remaining k elements from last .eg: 00123456789
+while (k > 0) {
+  st.pop();
+  k--;
+}
+// retrieve the string from the stack in the same order.
+let ans = new Array(st.length);
+let h = ans.length - 1;
+while (h >= 0) {
+  ans[h--] = st.pop();
+}
+// removing the preceding zeros
+let d = 0;
+while (d < ans.length && ans[d] === "0") {
+  d++;
+}
+
+let sb = "";
+while (d < ans.length) {
+  sb = sb + ans[d++];
+}
+let n = 0;
+if (sb.length === 0) console.log(n.toString());
+else console.log(sb.toString()); //1234560
+

@@ -1,0 +1,116 @@
+Problem Description : 
+
+You have a string, denoted as A.
+
+To transform the string, you should perform the following operation repeatedly:
+Identify the first occurrence of consecutive identical pairs of characters within the string.
+Remove this pair of identical characters from the string.
+Repeat steps 1 and 2 until there are no more consecutive identical pairs of characters.
+The final result will be the transformed string.
+
+
+Problem Constraints
+1 <= |A| <= 100000
+
+
+
+Input Format
+First and only argument is string A.
+
+
+
+Output Format
+Return the final string.
+
+
+
+Example Input
+Input 1:
+
+ A = "abccbc"
+Input 2:
+
+ A = "ab"
+
+
+Example Output
+Output 1:
+
+ "ac"
+Output 2:
+
+ "ab"
+
+
+Example Explanation
+Explanation 1:
+
+The Given string is "abccbc".
+
+Remove the first occurrence of consecutive identical pairs of characters "cc".
+After removing the string will be "abbc".
+
+Again Removing the first occurrence of consecutive identical pairs of characters "bb".
+After remvoing, the string will be "ac".
+
+Now, there is no consecutive identical pairs of characters.
+Therefore the string after this operation will be "ac".
+Explanation 2:
+
+ No removals are to be done.
+
+ //=============================================================================================================================================================================================================================
+way-1 : 
+
+function longestValidSubstring(A) {
+  const stack = []; // Initialize stack with -1 as a base element
+
+  for (let i = 0; i < A.length; i++) {
+    if (stack.length > 0 && A[i] === stack[stack.length - 1]) {
+      // if the upcoming element is same as  the element at top of the stack , then pop out the top element of the stack.else insert the element into the stack.
+      stack.pop();
+    } else {
+      stack.push(A[i]);
+    }
+  }
+
+  return stack.join("");
+}
+
+// Example usage:
+const input1 = "abccbc";
+const result1 = longestValidSubstring(input1);
+console.log("Input 1:", result1); // Output: ac
+
+//=========================================================================
+// way - 2:-
+
+
+// logic : same as the previous question . but now pop out only when the count is equals to k.
+function removeConsecutiveDuplicates(str, k) {
+  const stack = [];
+  for (let char of str) {
+    // very first element
+    if (stack.length === 0 || stack[stack.length - 1].char !== char) {
+      stack.push({ char, count: 1 });
+    } else if (stack[stack.length - 1].char === char) {
+      stack[stack.length - 1].count++;
+    }
+    if (stack[stack.length - 1].count === k) {
+      stack.pop();
+    }
+  }
+  //console.log(stack)
+  let result = "";
+  for (let item of stack) {
+    result += item.char.repeat(item.count);
+  }
+
+  return result;
+}
+
+// Example usage:
+const inputString =A
+const k =2;
+const result = removeConsecutiveDuplicates(inputString, k);
+return (result); // Output:"e"

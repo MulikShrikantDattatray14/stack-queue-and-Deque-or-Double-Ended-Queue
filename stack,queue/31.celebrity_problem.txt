@@ -1,0 +1,214 @@
+In a party of N people, only one person is known to everyone. Such a person may be present at the party, if yes, (s)he doesn’t know anyone at the party. We can only ask questions like “does A know B? “. Find the stranger (celebrity) in the minimum number of questions.
+We can describe the problem input as an array of numbers/characters representing persons in the party. We also have a hypothetical function HaveAcquaintance(A, B) which returns true if A knows B, and false otherwise. How can we solve the problem? 
+
+Examples:  
+
+Input:
+MATRIX = { {0, 0, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}, {0, 0, 1, 0} }
+Output: id = 2
+Explanation: The person with ID 2 does not know anyone but everyone knows him
+
+Input:
+MATRIX = { {0, 0, 1, 0}, {0, 0, 1, 0}, {0, 1, 0, 0}, {0, 0, 1, 0} }
+Output: No celebrity
+Explanation: There is no celebrity.
+
+================================================================================================================================================================================================================================
+
+//1.USING STACK : 
+//https://www.youtube.com/watch?v=bIvK_2OEzk0
+
+
+Logic : use a stack to keep track of potential celebrities and eliminate non-celebrity candidates.
+
+
+function findCelebrity(MATRIX) {
+  const stack = [];
+  // Push all people onto the stack
+  for (let i = 0; i < MATRIX.length; i++) {
+    stack.push(i);
+  }
+  // While there are more than one person in the stack
+  while (stack.length > 1) {
+    const personA = stack.pop();
+    const personB = stack.pop();
+    // If A knows B, then A can't be the celebrity, but B might be
+    if (HaveAcquaintance(personA, personB, MATRIX)) {
+      stack.push(personB);
+    } else {
+      // If A doesn't know B, then B can't be the celebrity, but A might be
+      stack.push(personA);
+    }
+  }
+
+  // Potential celebrity candidate.
+  const potentialCelebrity = stack.pop();
+  // Check if the potential celebrity is a real celebrity
+  for (let i = 0; i < MATRIX.length; i++) {
+    if (
+      i !== potentialCelebrity &&
+      (HaveAcquaintance(potentialCelebrity, i, MATRIX) ||
+        !HaveAcquaintance(i, potentialCelebrity, MATRIX))
+    ) {
+      // (i !== potentialCelebrity) means - we no need to match same person with him self.
+      // (HaveAcquaintance(potentialCelebrity, i, MATRIX) means - potential candidate knows someone.
+      // !HaveAcquaintance(i, potentialCelebrity, MATRIX) means - someone doesnot know the potential candidate.
+
+      // If the potential celebrity knows someone or someone doesn't know the potential celebrity, return "No celebrity"
+      return "No celebrity";
+    }
+  }
+
+  // If no issues found, the potential celebrity is the celebrity
+  return potentialCelebrity;
+}
+
+// Placeholder function, replace with your actual implementation
+function HaveAcquaintance(personA, personB, MATRIX) {
+  // Replace this with your actual logic to check if personA knows personB
+  // For example, if you have a matrix, you can use MATRIX[personA][personB] to check acquaintance
+  return MATRIX[personA][personB] === 1;
+}
+
+// Example usage with the provided matrices
+const MATRIX1 = [
+  [0, 0, 1, 0],
+  [0, 0, 1, 0],
+  [0, 0, 0, 0],
+  [0, 0, 1, 0],
+];
+
+const MATRIX2 = [
+  [0, 0, 1, 0],
+  [0, 0, 1, 0],
+  [0, 1, 0, 0],
+  [0, 0, 1, 0],
+];
+
+console.log("Output for MATRIX1:", findCelebrity(MATRIX1)); // Output: 2
+console.log("Output for MATRIX2:", findCelebrity(MATRIX2)); // Output: No celebrity
+
+===========================================================================================================
+
+2. Using the GRAPH approach : 
+
+// JavaScript program to find celebrity
+
+// Max # of persons in the party
+var N = 8;
+
+// Person with 2 is celebrity
+var MATRIX = [[0, 0, 1, 0],
+[0, 0, 1, 0],
+[0, 0, 0, 0],
+[0, 0, 1, 0]];
+
+function knows(a, b) {
+  // returns 1 or 0;
+  return MATRIX[a][b];
+}
+
+// Returns -1 if celebrity
+// is not present. If present,
+// returns id (value from 0 to n-1).
+function findCelebrity(n) {
+
+  // the graph needs not be constructed
+  // as the edges can be found by
+  // using knows function
+
+  // degree array;
+  var indegree = Array(n).fill(0);
+  var outdegree = Array(n).fill(0);
+
+  // query for all edges
+  for (var i = 0; i < n; i++) {
+    for (j = 0; j < n; j++) {
+      var x = knows(i, j);
+
+      // set the degrees
+      outdegree[i] += x;
+      indegree[j] += x;
+    }
+  }
+
+  // find a person with indegree  as n-1
+  // and out degree  as 0
+  for (i = 0; i < n; i++)
+    if (indegree[i] == n - 1 && outdegree[i] == 0)
+      return i;
+
+  return -1;
+}
+
+// Driver code
+
+var n = 4;
+var id = findCelebrity(n);
+if (id == -1)
+  console.log("No celebrity");
+else
+  console.log("Celebrity ID " + id);
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+3. Using  the Greedy algo approach  : 
+
+The celebrity problem can also be solved using a greedy algorithm. The idea is to iterate through the people and find a candidate who could potentially be a celebrity based on the fact that the current candidate doesn't know the next person. Here's a solution using a greedy approach:
+
+
+function findCelebrity(MATRIX) {
+  let candidate = 0;
+
+  // Find a potential candidate
+  for (let i = 1; i < MATRIX.length; i++) {
+    if (HaveAcquaintance(candidate, i, MATRIX)) {
+      // If candidate knows i, then candidate can't be the celebrity, and i might be
+      candidate = i;
+    }
+  }
+
+  // Check if the potential candidate is a real celebrity
+  for (let i = 0; i < MATRIX.length; i++) {
+    if (i !== candidate && (HaveAcquaintance(candidate, i, MATRIX) || !HaveAcquaintance(i, candidate, MATRIX))) {
+      // If the potential celebrity knows someone or someone doesn't know the potential celebrity, return "No celebrity"
+      return "No celebrity";
+    }
+  }
+
+  // If no issues found, the potential candidate is the celebrity
+  return candidate;
+}
+
+// Placeholder function, replace with your actual implementation
+function HaveAcquaintance(personA, personB, MATRIX) {
+  // Replace this with your actual logic to check if personA knows personB
+  // For example, if you have a matrix, you can use MATRIX[personA][personB] to check acquaintance
+  return MATRIX[personA][personB] === 1;
+}
+
+// Example usage with the provided matrices
+const MATRIX1 = [
+  [0, 0, 1, 0],
+  [0, 0, 1, 0],
+  [0, 0, 0, 0],
+  [0, 0, 1, 0]
+];
+
+const MATRIX2 = [
+  [0, 0, 1, 0],
+  [0, 0, 1, 0],
+  [0, 1, 0, 0],
+  [0, 0, 1, 0]
+];
+
+console.log("Output for MATRIX1:", findCelebrity(MATRIX1)); // Output: 2
+console.log("Output for MATRIX2:", findCelebrity(MATRIX2)); // Output: No celebrity
+
+
+
+==========================================================================================================

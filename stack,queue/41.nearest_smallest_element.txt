@@ -1,0 +1,42 @@
+Given an array A, find the nearest smaller element G[i] for every element A[i] in the array such that the element has an index smaller than i.
+More formally,
+G[i] for an element A[i] = an element A[j] such that
+j is maximum possible AND
+j < i AND
+A[j] < A[i]
+Elements for which no smaller element exist, consider the next smaller element as -1.
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+logic: nearest previous smaller
+module.exports = { 
+ //param A : array of integers
+ //return a array of integers
+	prevSmaller : function(A){
+
+function previoussmall(a) {
+    const result = [];
+    const stack = [];
+    for (let i = 0; i < a.length; i++) {
+        while (stack.length > 0 && stack[stack.length - 1] >= a[i]) {
+            stack.pop();
+        }
+        if (stack.length === 0) {
+            result.push(-1);
+        } else {
+            result.push(stack[stack.length - 1]);
+        }
+        stack.push(a[i]);
+    }
+    return result;
+}
+
+// Example 1
+const arr1 = A
+const result1 = previoussmall(arr1);
+return result1;
+
+
+	}
+};

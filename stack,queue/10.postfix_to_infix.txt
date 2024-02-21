@@ -1,0 +1,43 @@
+//https://www.youtube.com/watch?v=m7SGekhd1mQ&t=445s
+//steps-1: operand - push to stack.
+//step-2 : operator - second operand= stack.pop() ; first operand= stack.pop(); let result = first operand + operator + second operand and push the result into stack.
+//step-3 : once the expression is finished , return the stack.pop() or print the remaianing element from the stack.
+function postfixToInfix(postfixExpression) {
+  const stack = [];
+
+  for (let i = 0; i < postfixExpression.length; i++) {
+    const token = postfixExpression[i];
+    if (isOperand(token)) {
+      // operand - push to stack.
+      stack.push(token);
+    } else {
+      const operand2 = stack.pop();
+      const operand1 = stack.pop();
+      const infixExpression = `(${operand1}${token}${operand2})`;
+      stack.push(infixExpression);
+    }
+  }
+
+  if (stack.length !== 1) {
+    console.error("Invalid postfix expression");
+    return null;
+  }
+
+  return stack[0];
+}
+
+function isOperand(token) {
+  // Check if the token is an operand (a number or variable)
+  return /^[a-zA-Z0-9_]+$/.test(token);
+}
+//   Input: ‘postfix’ = “ab+c+”
+
+// Output: ‘infix’ = “((a+b)+c)”
+// Example usage:
+const postfixExpression = "ab+c+";
+const infixExpression = postfixToInfix(postfixExpression);
+
+if (infixExpression !== null) {
+  console.log(`Postfix: ${postfixExpression}`);
+  console.log(`Infix: ${infixExpression}`);
+}

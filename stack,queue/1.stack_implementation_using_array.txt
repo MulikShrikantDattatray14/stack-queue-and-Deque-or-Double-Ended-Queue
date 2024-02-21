@@ -1,0 +1,54 @@
+//drawback - you cannot insert element into it dynamically
+class Stack {
+  constructor() {
+    this.size = 10000;
+    this.arr = new Array(this.size);
+    this.topIndex = -1; // Changed the property name to avoid conflict
+  }
+
+  push(x) {
+    //add new at back
+    this.topIndex++;
+    this.arr[this.topIndex] = x;
+  }
+
+  pop() {
+    //return the last removed item
+    if (this.topIndex < 0) return -1;
+    const x = this.arr[this.topIndex];
+    this.topIndex--;
+    return x;
+  }
+
+  getTop() {
+    //give the last pused item
+    if (this.topIndex < 0) return -1;
+    return this.arr[this.topIndex];
+  }
+
+  getSize() {
+    // return size
+    return this.topIndex + 1;
+  }
+
+  isempty() {
+    return this.topIndex == -1 || this.topIndex < 0;
+  }
+}
+
+const s = new Stack();
+s.push(6);
+s.push(3);
+s.push(7);
+
+console.log("Top of the stack before deleting any element: " + s.getTop());
+console.log("Size of the stack before deleting any element: " + s.getSize());
+console.log("The element deleted is: " + s.pop());
+console.log("Size of the stack after deleting an element: " + s.getSize());
+console.log("Top of the stack after deleting an element: " + s.getTop());
+console.log("is it empty :" + s.isempty());
+console.log("The element deleted is: " + s.pop());
+console.log("The element deleted is: " + s.pop());
+console.log("The element deleted is: " + s.pop());
+console.log("The element deleted is: " + s.pop());
+console.log("is it empty :" + s.isempty());

@@ -1,0 +1,82 @@
+//https://www.youtube.com/watch?v=_PU5t-gk_B4
+
+//step-1: "(" - push into stack
+//step-2 : operand - print it
+//step-3 : ")" - keep popping from stack and print till "(" is found
+//step-4 : operator- if stack is empty,push it into stack , else compare with the top operator in the stack. if it has higher push it into stack(low to high precdence form top to bottom),else keep popping from the stack and print till lower precedence operator is found.
+//step-5: once the expression is finished , keep popping from stack and print it.
+
+function priority(ch) {
+  if (ch === "^") {
+    return 3;
+  } else if (ch === "*" || ch === "/") {
+    return 2;
+  } else if (ch === "+" || ch === "-") {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+//https://www.youtube.com/watch?v=m7SGekhd1mQ
+function solve(A) {
+  A = A.split("");
+  var exp = []; /// final output .
+  var stack = []; // maintains the stack.
+
+  for (var i = 0; i < A.length; i++) {
+    var ch = A[i];
+    if ("a" <= ch && ch <= "z") {
+      // print it or push into exp[]
+      exp.push(ch);
+    } else if (ch === "(") {
+      //push into stack
+      stack.push(ch);
+    } else if (ch === ")") {
+      // keep popping from stack and print till '(' is found.
+      while (stack[stack.length - 1] !== "(") {
+        var val2 = exp.pop();
+
+        var val1 = exp.pop();
+
+        var operator = stack.pop();
+
+        exp.push(val1 + val2 + operator);
+      }
+      stack.pop(); // removes open bracket
+    } else {
+      //operator
+      if (stack.length === 0 || stack[stack.length - 1] === "(") {
+        // if stack is empty, push it in stack
+        stack.push(ch);
+      } else {
+        // when stack is not empty
+        // compare with the top operator in the stack. if higher precedence then push.
+        //Else popping from the stack and print till lower precedence operator is found.
+
+        while (
+          stack.length > 0 &&
+          priority(stack[stack.length - 1]) >= priority(ch)
+        ) {
+          // Else popping from the stack and print till lower precedence operator is found.
+          var val2 = exp.pop();
+          var val1 = exp.pop();
+          var operator = stack.pop();
+          exp.push(val1 + val2 + operator);
+        }
+        stack.push(ch); // if  higher precedence, the push into stack
+      }
+    }
+  }
+  // // once the expression is finished , keep popping from the stack and push into exp
+  while (stack.length > 0) {
+    var val2 = exp.pop();
+    var val1 = exp.pop();
+    var operator = stack.pop();
+    exp.push(val1 + val2 + operator);
+  }
+  console.log(exp[0]); // "abcd^e-fgh*+^*+i-"
+  return exp[0];
+}
+let A = "a+b*(c^d-e)^(f+g*h)-i";
+solve(A);

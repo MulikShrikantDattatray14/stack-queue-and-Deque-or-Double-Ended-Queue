@@ -1,0 +1,70 @@
+ After each letter, you jot down the very first letter that's only been called out once. If all letters have been repeated, you write "#".
+
+Example Input
+Input 1:
+
+ A = "abadbc"
+Input 2:
+
+ A = "abcabc"
+
+
+Example Output
+Output 1:
+
+"aabbdd"
+Output 2:
+
+"aaabc#"
+
+
+Example Explanation
+Explanation 1:
+
+"a"      -   first non repeating character 'a'
+"ab"     -   first non repeating character 'a'
+"aba"    -   first non repeating character 'b'
+"abad"   -   first non repeating character 'b'
+"abadb"  -   first non repeating character 'd'
+"abadbc" -   first non repeating character 'd'
+Explanation 2:
+
+"a"      -   first non repeating character 'a'
+"ab"     -   first non repeating character 'a'
+"abc"    -   first non repeating character 'a'
+"abca"   -   first non repeating character 'b'
+"abcab"  -   first non repeating character 'c'
+"abcabc" -   no non repeating character so '#'
+
+
+=================================================================================================
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+let A = "abadbc";
+
+const hm = new Map();
+const dquery = [];
+const sb = [];
+for (let i = 0; i < A.length; i++) {
+    const c = A.charAt(i);
+    if (hm.has(c)) hm.set(c, hm.get(c) + 1);
+    else {
+        hm.set(c, 1); // if frequency is 1, keep pushing into queue
+        dquery.push(c);
+    }
+
+    //keep removing first repeating elements
+    while (dquery.length !== 0 && hm.get(dquery[0]) > 1) {
+        //remove from front
+        dquery.shift();
+    }
+
+    if (dquery.length == 0) sb.push("#");
+    else sb.push(dquery[0]);
+}
+console.log(sb.join(""));
+
+//==============================================================================================

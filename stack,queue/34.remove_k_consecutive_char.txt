@@ -1,0 +1,30 @@
+// logic : same as the previous question . but now pop out only when the count is equals to k.
+function removeConsecutiveDuplicates(str, k) {
+  const stack = [];
+  for (let char of str) {
+    // when stack is empty or incoming character is  very new  element
+    if (stack.length === 0 || stack[stack.length - 1].char !== char) {
+      stack.push({ char, count: 1 });
+    } else if (stack[stack.length - 1].char === char) {
+      stack[stack.length - 1].count++;
+    }
+    if (stack[stack.length - 1].count === k) {
+      // delete the entire object i.e { char ,count}
+      stack.pop();
+    }
+  }
+  console.log(stack)
+  let result = "";
+  for (let item of stack) {
+    result += item.char.repeat(item.count);
+  }
+
+  return result;
+}
+
+// Example usage:
+const inputString = "aadbbbeeeee";
+const k = 5;
+const result = removeConsecutiveDuplicates(inputString, k);
+console.log(result); // Output:"e"
+

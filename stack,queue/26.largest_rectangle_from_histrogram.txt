@@ -1,0 +1,58 @@
+Input: heights = [2,1,5,6,2,3]
+Output: 10
+Explanation: The above is a histogram where width of each bar is 1.
+The largest rectangle is shown in the red area, which has an area = 10 units.
+//https://www.youtube.com/watch?v=vhUxKxiconE
+////////////////////////////////////////////////////////////////////////////////////////
+
+function maxarea(a) {
+  let maxans = 0;
+  let ps = prevsmall(a);
+  let ns = nextsmall(a);
+  for (let i = 0; i < a.length; i++) {
+    let curr = (ns[i] - ps[i] - 1) * a[i];
+    maxans = Math.max(maxans, curr);
+  }
+  return maxans;
+}
+
+// get the index and not the values
+function prevsmall(a) {
+  const result = [];
+  const stack = [];
+  for (let i = 0; i < a.length; i++) {
+    while (stack.length > 0 && a[stack[stack.length - 1]] >= a[i]) {
+      stack.pop();
+    }
+    if (stack.length === 0) {
+      result.push(-1);
+    } else {
+      result.push(stack[stack.length - 1]);
+    }
+    stack.push(i);
+  }
+  return result;
+}
+
+function nextsmall(a) {
+  let n = a.length;
+  const result = [];
+  const stack = [];
+  for (let i = a.length - 1; i >= 0; i--) {
+    while (stack.length > 0 && a[stack[stack.length - 1]] >= a[i]) {
+      stack.pop();
+    }
+    if (stack.length === 0) {
+      result.unshift(n);
+    } else {
+      result.unshift(stack[stack.length - 1]);
+    }
+    stack.push(i);
+  }
+  return result;
+}
+let heights = [2, 1, 5, 6, 2, 3];
+//Output: 10
+let a = heights;
+let ans = maxarea(a);
+console.log(ans);

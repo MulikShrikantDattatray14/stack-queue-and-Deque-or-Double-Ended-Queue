@@ -1,0 +1,41 @@
+let num = "321"; // Replace this with your desired input-1234560
+let k = 1; // Replace this with your desired value for k
+//output: 67
+let st = [];
+for (let i = 0; i < num.length; i++) {
+  let ch = num.charAt(i);
+  // stack is not empty && k is still postive && top element is greater , so keep popping and keep decreasing value of k ;
+  while (st.length > 0 && k > 0 && st[st.length - 1] < ch) {
+    st.pop();
+    k--;
+  }
+  // finally insert the value
+  st.push(ch);
+}
+
+// once the entire string is traversed and k is still positive , so start removing  the remaining k elements from last/end
+//bcz larger number are at the end.
+while (k > 0) {
+  st.pop();
+  k--;
+}
+//retrieve the string from the stack in the same order
+let ans = new Array(st.length);
+let h = ans.length - 1;
+while (h >= 0) {
+  ans[h--] = st.pop();
+}
+// removing the preceding zeros
+let d = 0;
+while (d < ans.length && ans[d] === "0") {
+  d++;
+}
+console.log(ans);
+let sb = "";
+while (d < ans.length) {
+  sb = sb + ans[d];
+  d++;
+}
+let n = 0;
+if (sb.length === 0) console.log(n.toString());
+else console.log(sb.toString()); //1234560

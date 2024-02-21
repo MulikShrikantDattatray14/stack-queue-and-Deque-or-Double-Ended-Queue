@@ -1,0 +1,56 @@
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+Every close bracket has a corresponding open bracket of the same type.
+ 
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "()[]{}"
+Output: true
+Example 3:
+
+Input: s = "(]"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of parentheses only '()[]{}'.
+
+
+================================================================================================================================================================================================================================
+
+
+//https://www.youtube.com/watch?v=cnjxnFDNie8
+function isValid(s) {
+  const stack = [];
+  for (const c of s) {
+    // if its a open type , push it .
+    if (c === "(" || c === "[" || c === "{") {
+      stack.push(c);
+    } else {
+      if (stack.length === 0) return false;
+      if (c === "]" && stack[stack.length - 1] !== "[") return false;
+      if (c === "}" && stack[stack.length - 1] !== "{") return false;
+      if (c === ")" && stack[stack.length - 1] !== "(") return false;
+      // when ita a closing bracket , pop the element form the stack.
+      stack.pop();
+    }
+  }
+  return stack.length === 0;
+}
+
+// Example usage:
+const inputString = "{[()]}";
+const result = isValid(inputString);
+console.log(result); // Output: true
+

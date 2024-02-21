@@ -1,0 +1,86 @@
+//Remove Duplicate Letters | Leetcode 316-https://leetcode.com/problems/remove-duplicate-letters/description/
+
+
+Given a string s, remove duplicate letters so that every letter appears once and only once. You must make sure your result is 
+the smallest in lexicographical order
+ among all possible results.
+
+ 
+
+Example 1:
+
+Input: s = "bcabc"
+Output: "abc"
+Example 2:
+
+Input: s = "cbacdcbc"
+Output: "acdb"
+ 
+
+Constraints:
+
+1 <= s.length <= 10^4
+s consists of lowercase English letters.
+//refer-https://www.youtube.com/watch?v=luCn7p2CIbI
+
+
+//==============================================================================================================================================================================================================================
+
+//
+function removeDuplicate(s) {
+  let stack = [];
+  let freq = new Array(26).fill(0);
+  //visited array
+  let exist = new Array(26).fill(false);
+
+  // fill the frequency for the input string
+  for (let i = 0; i < s.length; i++) {
+    let ch = s.charAt(i);
+    freq[ch.charCodeAt(0) - "a".charCodeAt(0)]++;
+  }
+
+  for (let i = 0; i < s.length; i++) {
+    let ch = s.charAt(i);
+    freq[ch.charCodeAt(0) - "a".charCodeAt(0)]--;
+    // if we have already considered the ch into the answer earlier ,then continue .
+    if (exist[ch.charCodeAt(0) - "a".charCodeAt(0)]) continue;
+    // stack is not empty&& top element is greater than the incoming element && freq of the character at top is positive, then keep popping the elements present in the stack
+    while (
+      stack.length > 0 &&
+      stack[stack.length - 1] > ch &&
+      freq[stack[stack.length - 1].charCodeAt(0) - "a".charCodeAt(0)] > 0
+    ) {
+      let rem = stack.pop();
+      exist[rem.charCodeAt(0) - "a".charCodeAt(0)] = false;
+    }
+
+    stack.push(ch);
+    exist[ch.charCodeAt(0) - "a".charCodeAt(0)] = true;
+  }
+
+  let ans = new Array(stack.length);
+  let i = ans.length - 1;
+  while (i >= 0) ans[i--] = stack.pop();
+
+  return ans.join("");
+}
+// Example 1:
+// Input: bcabc
+// Output: abc
+
+// Example 2:
+// Input: cbacdcbc
+// Output: acdb
+// Example 1
+let input1 = "bcabc";
+let output1 = removeDuplicate(input1);
+console.log("Example 1:");
+console.log("Input: " + input1);
+console.log("Output: " + output1);
+
+// Example 2
+let input2 = "cbacdcbc";
+let output2 = removeDuplicate(input2);
+console.log("\nExample 2:");
+console.log("Input: " + input2);
+console.log("Output: " + output2);

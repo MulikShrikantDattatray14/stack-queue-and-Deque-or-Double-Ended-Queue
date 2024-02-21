@@ -1,0 +1,63 @@
+// Problem Statement: Implement a Stack using a single Queue.
+// Note: Stack is a data structure that follows the Last In First Out (LIFO) rule.
+// Note: Queue is a data structure that follows the First In First Out (FIFO) rule.
+
+// The code you provided seems to be a correct implementation of a stack using a single queue. It follows the idea of pushing an element to the queue and then rotating the queue by pushing and popping elements to simulate the behavior of a stack.
+
+// Here's a brief explanation of the code:
+
+// The push method adds an element to the end of the queue and then rotates the elements in the queue so that the newly added element becomes the front/top of the stack.
+
+// The pop method removes the front element of the queue, simulating the removal of the top element of the stack.
+
+// The top method returns the front element of the queue, representing the top element of the stack.
+
+// The size method returns the length of the queue, which corresponds to the size of the stack.
+
+// The example usage at the end of the code also demonstrates the basic operations of pushing, popping, retrieving the top element, and checking the size of the stack. The output should be as expected for a stack implementation.
+
+// Overall, the logic looks correct, and the code should work as intended for implementing a stack using a single queue.
+
+// see later - implement stack using two queue
+class Stack {
+  constructor() {
+    this.q = [];
+  }
+  push(x) {
+    // convert FIFO to LIFO
+    //so insert at start from back and push the rest of the elements backwards.
+    // once you push a new element into the queue , now try to bring it to the first position form last position.
+    this.q.push(x);
+    // after very new push reverse the array
+    //all the elements below x should be brought on top in same order
+    for (let i = 0; i < this.q.length - 1; i++) {
+      // remove from front(thus a queue operation) and push it back till the new element comes.
+      this.q.push(this.q.shift());
+    }
+  }
+  pop() {
+    // once you bring the new element to front, remove it from front , thus last in first out
+    // removes first element
+    return this.q.shift();
+  }
+  top() {
+    //returns top/front element
+    return this.q[0];
+  }
+  size() {
+    //return size
+    return this.q.length;
+  }
+}
+
+const s = new Stack();
+s.push(3);
+s.push(2);
+s.push(4);
+s.push(1);
+
+console.log("Top of the stack: " + s.top());
+console.log("Size of the stack before removing element: " + s.size());
+console.log("The deleted element is: " + s.pop());
+console.log("Top of the stack after removing element: " + s.top());
+console.log("Size of the stack after removing element: " + s.size());
